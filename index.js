@@ -9,6 +9,9 @@ app.get('/api/:date?', (req, res) => {
     if(!isNaN(date)) {
         date = parseInt(date);
     }
+    if (!date) {
+        res.json({ unix: new Date().getTime(), utc: new Date().toUTCString() });
+    }
     const dateObject = new Date(date);
     if (dateObject.toString() === 'Invalid Date') {
         res.json({ error: 'Invalid Date' });
