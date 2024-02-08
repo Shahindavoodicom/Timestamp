@@ -11,7 +11,7 @@ app.use(cors());
 let urlList = [];
 let shortUrl = 0;
 app.post('/api/shorturl', (req, res) => {
-  const { url } = req.body;
+    const url = req.body.data;
   if (!url) {
     res.json({ error: 'No url provided' });
   } else if (url.match(/^(http|https):\/\/[^ "]+$/)) {
