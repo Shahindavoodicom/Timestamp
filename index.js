@@ -10,8 +10,8 @@ app.use(cors());
 
 let urlList = [];
 let shortUrl = 0;
-app.post('/api/shorturl', (req, res) => {
-    const url = req.body.url;
+app.post('/api/shorturl', async (req, res) => {
+    const url = (await req.formData()).get('url');
     console.log(url)
   if (!url) {
     res.json({ error: 'No url provided' });
