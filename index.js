@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const port = 5000;
 const cors = require('cors');
+const bodyParser = require('body-parser');
+
+
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 //Waiting:You can POST a URL to /api/shorturl and get a JSON response with original_url and short_url properties. Here's an example: { original_url : 'https://freeCodeCamp.org', short_url : 1}
@@ -10,8 +14,8 @@ app.use(cors());
 
 let urlList = [];
 let shortUrl = 0;
-app.post('/api/shorturl', async (req, res) => {
-    const url = (await req.formData()).get('url');
+app.post('/api/shorturl',  (req, res) => {
+    const url = req.body.url;
     console.log(url)
   if (!url) {
     res.json({ error: 'No url provided' });
