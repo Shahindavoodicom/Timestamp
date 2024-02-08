@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
 const port = 5000;
-
+const cors = require('cors');
 app.use(express.json());
-
+app.use(cors());
 app.get('/api/:date?', (req, res) => {
     let date = req.params.date;
     if(!isNaN(date)) {
