@@ -12,14 +12,16 @@ let urlList = [];
 let shortUrl = 0;
 app.post('/api/shorturl', (req, res) => {
   const { url } = req.body;
-  if (url.match(/^(http|https):\/\/[^ "]+$/)) {
+  if (!url) {
+    res.json({ error: 'No url provided' });
+  } else if (url.match(/^(http|https):\/\/[^ "]+$/)) {
     shortUrl++;
     urlList.push({ original_url: url, short_url: shortUrl });
     res.json({ original_url: url, short_url: shortUrl });
   } else {
     res.json({ error: 'invalid url' });
   }
-});
+});;
 
 app.get('/api/shorturl/:short_url', (req, res) => {
     const { short_url } = req.params;
