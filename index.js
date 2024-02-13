@@ -25,7 +25,7 @@ app.get('/api/users', (req, res) => {
 });
 app.post('/api/users/:_id/exercises', (req, res) => {
     const { _id } = req.params;
-    const { description, duration, date = new Date().toDateString() } = req.body;
+    const { description, duration, date = req.body.date ? new Date(req.body.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) } = req.body;
     const user = users.find((user) => user._id === _id);
     const log = { description, duration: Number(duration), date };
     user.log = user.log || [];
