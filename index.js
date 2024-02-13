@@ -25,18 +25,32 @@ app.get('/api/users', (req, res) => {
 
 app.post('/api/users/:_id/exercises', (req, res) => {
     const { _id } = req.params;
-    const { description, duration, date } = req.body;
-    const user = users.find((user) => user.id === parseInt(_id));
+    const { description, duration, date = new Date().toISOString() } = req.body;
+    const user = users.find((user) => user._id === parseInt(_id));
     const log = { description, duration, date };
     const exercise = { username: user.username, _id, log };
     exercises.push(exercise);
-    res.json(exercise);
+    user.log = user.log || [];
+    user.log.push(log);
+    res.json(user);
 });
 
 app.get('/api/users/:_id/logs', (req, res) => {
     const { _id } = req.params;
-    const user = users.find((user) => user.id === parseInt(_id));
-    const log = exercises.filter((exercise) => exercise._id === parseInt(_id));
+    const { from, to, limit } = req.query;
+    const user = users.find((user) => user._id === parseInt(_id));
+    let log = user.log || [];
+    if (from) {
+        const fromDate = new Date(from);
+        log = log.filter((exercise) => new Date(exercise.date) >= fromDate);
+    }
+    if (to) {
+        const toDate = new Date(to);
+        log = log.filter((exercise) => new Date(exercise.date) <= toDate);
+    }
+    if (limit) {
+        log = log.slice(0, limit);
+    }
     const count = log.length;
     res.json({ username: user.username, _id, count, log });
 });
