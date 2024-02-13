@@ -25,12 +25,17 @@ app.get('/api/users', (req, res) => {
 });
 app.post('/api/users/:_id/exercises', (req, res) => {
     const { _id } = req.params;
-    const { description, duration, date = req.body.date ? new Date(req.body.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) } = req.body;
+    let description= req.body.description;
+    let duration = req.body.duration;
+    let date = req.body.date;
+    if (!date) {
+        date = new Date().toISOString().substring(0, 10);
+    }
     const user = users.find((user) => user._id === _id);
     const log = { description, duration: Number(duration), date };
     user.log = user.log || [];
     user.log.push(log);
-    res.json({ _id: user._id, username: user.username, date , duration, description });
+    res.json({ _id: user._id, username: user.username, date: new Date(date).toDateString(), duration:duration, description:description });
 });
 
 app.get('/api/users/:_id/logs', (req, res) => {
