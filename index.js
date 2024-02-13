@@ -20,19 +20,17 @@ app.post('/api/users', (req, res) => {
 });
 
 app.get('/api/users', (req, res) => {
-    res.json(users);
+    const usersData = users.map(user => ({username: user.username, _id: user._id}));
+    res.json(usersData);
 });
-
 app.post('/api/users/:_id/exercises', (req, res) => {
     const { _id } = req.params;
-    const { description, duration, date = new Date().toISOString() } = req.body;
+    const { description, duration, date = new Date().toDateString() } = req.body;
     const user = users.find((user) => user._id === parseInt(_id));
-    const log = { description, duration, date };
-    const exercise = { username: user.username, _id, log };
-    exercises.push(exercise);
+    const log = { description, duration: Number(duration), date };
     user.log = user.log || [];
     user.log.push(log);
-    res.json(user);
+    res.json({ username: user.username, _id: user._id, log: user.log });
 });
 
 app.get('/api/users/:_id/logs', (req, res) => {
@@ -40,6 +38,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
     const { from, to, limit } = req.query;
     const user = users.find((user) => user._id === parseInt(_id));
     let log = user.log || [];
+    log = log.map(exercise => ({...exercise, date: new Date(exercise.date).toDateString()}));
     if (from) {
         const fromDate = new Date(from);
         log = log.filter((exercise) => new Date(exercise.date) >= fromDate);
