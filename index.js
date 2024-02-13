@@ -3,7 +3,7 @@ const app = express();
 const port = 5000;
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
+const { v4: uuidv4 } = require('uuid');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
@@ -14,7 +14,7 @@ let logs = [];
 
 app.post('/api/users', (req, res) => {
     const { username } = req.body;
-    const _id = users.length + 1;
+    const _id = uuidv4();
     users.push({ username, _id });
     res.json({ username , _id });
 });
@@ -30,7 +30,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     const log = { description, duration: Number(duration), date };
     user.log = user.log || [];
     user.log.push(log);
-    res.json({ username: user.username, _id: user._id, log: user.log });
+    res.json({  _id: user._id , username: user.username , log: user.log });
 });
 
 app.get('/api/users/:_id/logs', (req, res) => {
