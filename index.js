@@ -20,7 +20,7 @@ app.post('/api/users', (req, res) => {
 });
 
 app.get('/api/users', (req, res) => {
-    const usersData = users.map(user => ({username: user.username, _id: user._id}));
+    const usersData = users.map(user => ({_id: user._id , username: user.username, __V : 0}));
     res.json(usersData);
 });
 app.post('/api/users/:_id/exercises', (req, res) => {
