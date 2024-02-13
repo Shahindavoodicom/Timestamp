@@ -26,7 +26,7 @@ app.get('/api/users', (req, res) => {
 app.post('/api/users/:_id/exercises', (req, res) => {
     const { _id } = req.params;
     const { description, duration, date = new Date().toDateString() } = req.body;
-    const user = users.find((user) => user._id === parseInt(_id));
+    const user = users.find((user) => user._id === _id);
     const log = { description, duration: Number(duration), date };
     user.log = user.log || [];
     user.log.push(log);
@@ -36,7 +36,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 app.get('/api/users/:_id/logs', (req, res) => {
     const { _id } = req.params;
     const { from, to, limit } = req.query;
-    const user = users.find((user) => user._id === parseInt(_id));
+    const user = users.find((user) => user._id === _id);
     let log = user.log || [];
     log = log.map(exercise => ({...exercise, date: new Date(exercise.date).toDateString()}));
     if (from) {
@@ -48,7 +48,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
         log = log.filter((exercise) => new Date(exercise.date) <= toDate);
     }
     if (limit) {
-        log = log.slice(0, limit);
+        log = log.slice(0, Number(limit));
     }
     const count = log.length;
     res.json({ username: user.username, _id, count, log });
