@@ -30,7 +30,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     const log = { description, duration: Number(duration), date };
     user.log = user.log || [];
     user.log.push(log);
-    res.json({  _id: user._id , username: user.username , log: user.log });
+    res.json({ _id: user._id, username: user.username, description, duration, date });
 });
 
 app.get('/api/users/:_id/logs', (req, res) => {
