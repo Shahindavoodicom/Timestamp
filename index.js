@@ -35,7 +35,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     const log = { description, duration: Number(duration), date };
     user.log = user.log || [];
     user.log.push(log);
-    res.json({ _id: user._id, username: user.username, date: new Date(date).toDateString(), duration:duration, description:description });
+    res.json({ _id: user._id, username: user.username, date: new Date(date).toDateString(), duration:Number(duration), description:description });
 });
 
 app.get('/api/users/:_id/logs', (req, res) => {
